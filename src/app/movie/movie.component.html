@@ -1,0 +1,92 @@
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="navbar-container">
+    <!-- Left Side of Navbar -->
+    <div class="navbar-left">
+      <div class="logo">MovieApp</div>
+      <div class="navbar-links">
+        <div>Home</div>
+        <div>New</div>
+        <div><strong> Popular</strong></div>
+        <div>List</div>
+        <div>Guide</div>
+      </div>
+    </div>
+
+    <!-- Right Side of Navbar -->
+    <div class="navbar-right">
+      <!-- Search Bar -->
+      <div class="search-bar">
+        <input type="text" class="search-input" placeholder="Search movies...">
+        <button class="search-button">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+
+      <div class="user-login">
+        <button class="login-button">
+          <i class="fas fa-user"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Page Container -->
+<div class="page-container">
+  <!-- Sidebar for Filters and Sorting -->
+  <div class="sidebar">
+    <h2>Filters</h2>
+
+    <!-- Genre Filter Container -->
+    <div class="genre-filter-container">
+      <!-- Generate filter buttons dynamically -->
+      <button *ngFor="let genre of genres"
+              [class.active]="selectedGenres.includes(genre.id)"
+              class="genre-button"
+              (click)="onGenreChange(genre.id)">  
+        {{ genre.name }}
+      </button>
+    </div>
+
+    <!-- Sort Dropdown -->
+    <div class="sort-container">
+      <label for="sort">Sort By:</label>
+      <div class="custom-dropdown">
+        <select id="sort" class="sort-dropdown" (change)="onSortChange($event)">
+          <option value="popularity.desc">Popularity Descending</option>
+          <option value="popularity.asc">Popularity Ascending</option>
+          <option value="release_date.desc">Release Date Descending</option>
+          <option value="release_date.asc">Release Date Ascending</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="main-content">
+    <!-- Loading Spinner -->
+    <div *ngIf="loading" class="loading-spinner">Loading...</div>
+
+    <!-- Movie Container -->
+    <div class="movie-container">
+      <div *ngFor="let movie of movies" class="movie-card">
+        <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" alt="{{ movie.title }}">
+        <h3>{{ movie.title }}</h3>
+        <p><strong>Description</strong>
+          {{ movie.overview | slice:0:00 }}
+          <button class="btn" (click)="openModal(movie)">Read More</button>
+        </p>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" *ngIf="selectedMovie">
+      <div class="modal-content">
+        <span class="close" (click)="closeModal()">&times;</span>
+        <h2>{{ selectedMovie.title }}</h2>
+        <p>{{ selectedMovie.overview }}</p>
+      </div>
+    </div>
+  </div>
+</div>
